@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>월출빌딩 4층 임대 문의</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:'Noto Sans KR',sans-serif;
+    background:#f7f5f0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:2rem;
+  }
+
+  .page{
+    width:100%;
+    max-width:640px;
+  }
+
+  /* 상단 헤더 */
+  .header{
+    background:#1a1a1a;
+    color:#fff;
+    padding:2.5rem 2.5rem 2rem;
+    border-radius:16px 16px 0 0;
+  }
+  .eyebrow{
+    font-size:11px;
+    letter-spacing:.16em;
+    color:#888;
+    text-transform:uppercase;
+    margin-bottom:10px;
+  }
+  .building-name{
+    font-size:28px;
+    font-weight:700;
+    letter-spacing:-.02em;
+    line-height:1.1;
+    margin-bottom:6px;
+  }
+  .building-sub{
+    font-size:13px;
+    color:#aaa;
+    font-weight:300;
+  }
+  .vacancy-tag{
+    display:inline-block;
+    margin-top:1.2rem;
+    background:#e8f5e9;
+    color:#2e7d32;
+    font-size:12px;
+    font-weight:500;
+    padding:5px 14px;
+    border-radius:999px;
+  }
+
+  /* 4층 정보 */
+  .floor-info{
+    background:#fff;
+    padding:1.8rem 2.5rem;
+    border-left:1px solid #e8e4dc;
+    border-right:1px solid #e8e4dc;
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:0;
+  }
+  .floor-stat{
+    padding:0 1rem;
+    border-right:1px solid #f0ece4;
+  }
+  .floor-stat:first-child{padding-left:0}
+  .floor-stat:last-child{border-right:none}
+  .stat-label{font-size:11px;color:#999;letter-spacing:.04em;margin-bottom:5px}
+  .stat-value{font-size:20px;font-weight:700;color:#1a1a1a;letter-spacing:-.02em}
+  .stat-unit{font-size:12px;color:#666;font-weight:400;margin-left:2px}
+
+  /* QR 섹션 */
+  .qr-section{
+    background:#fff;
+    border:1px solid #e8e4dc;
+    border-top:none;
+    padding:2rem 2.5rem;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:2rem;
+  }
+
+  .qr-block{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
+  }
+  .qr-wrap{
+    width:148px;
+    height:148px;
+    border-radius:12px;
+    border:1px solid #eee;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+    overflow:hidden;
+    padding:8px;
+  }
+  .qr-wrap canvas, .qr-wrap img{
+    width:132px !important;
+    height:132px !important;
+  }
+  .qr-label{
+    text-align:center;
+  }
+  .qr-icon{
+    font-size:18px;
+    margin-bottom:4px;
+  }
+  .qr-channel{
+    font-size:14px;
+    font-weight:500;
+    color:#1a1a1a;
+    margin-bottom:2px;
+  }
+  .qr-desc{
+    font-size:11px;
+    color:#999;
+  }
+
+  /* 구분선 */
+  .qr-divider{
+    width:1px;
+    background:#f0ece4;
+    align-self:stretch;
+    margin:0 -1rem;
+  }
+
+  /* 직접 연락 */
+  .contact-row{
+    background:#1a1a1a;
+    padding:1.4rem 2.5rem;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .contact-label{font-size:11px;color:#666;letter-spacing:.06em;text-transform:uppercase}
+  .contact-number{
+    font-size:22px;
+    font-weight:700;
+    color:#fff;
+    letter-spacing:.04em;
+  }
+  .contact-hint{font-size:11px;color:#555;margin-top:2px}
+
+  /* 하단 */
+  .footer{
+    background:#111;
+    padding:1.2rem 2.5rem;
+    border-radius:0 0 16px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .footer-addr{font-size:11px;color:#555}
+  .footer-hours{font-size:11px;color:#555;text-align:right}
+
+  /* 인쇄용 A4 버전 안내 */
+  .print-btn{
+    margin-top:1.2rem;
+    text-align:center;
+  }
+  .print-btn button{
+    background:none;
+    border:1px solid #ccc;
+    border-radius:8px;
+    padding:8px 20px;
+    font-size:12px;
+    color:#666;
+    cursor:pointer;
+    font-family:'Noto Sans KR',sans-serif;
+  }
+  .print-btn button:hover{background:#eee}
+
+  @media print{
+    body{background:#fff;padding:0}
+    .print-btn{display:none}
+    .page{max-width:100%}
+    .header{border-radius:0}
+    .footer{border-radius:0}
+  }
+  @media(max-width:480px){
+    .floor-info{grid-template-columns:1fr 1fr;gap:1rem}
+    .floor-stat:nth-child(2){border-right:none}
+    .floor-stat:nth-child(3){grid-column:1/-1;padding-left:0;border-right:none;padding-top:.8rem;border-top:1px solid #f0ece4}
+    .qr-section{grid-template-columns:1fr;gap:1.5rem}
+    .qr-divider{display:none}
+    .contact-row{flex-direction:column;gap:6px;text-align:center}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <div class="eyebrow">임대 문의</div>
+    <div class="building-name">월출빌딩 4층</div>
+    <div class="building-sub">서울 중랑구 신내동 449-5</div>
+    <div class="vacancy-tag">현재 공실 — 즉시 입주 가능</div>
+  </div>
+
+  <div class="floor-info">
+    <div class="floor-stat">
+      <div class="stat-label">전용 면적</div>
+      <div class="stat-value">132<span class="stat-unit">m²</span></div>
+    </div>
+    <div class="floor-stat">
+      <div class="stat-label">층수</div>
+      <div class="stat-value">4<span class="stat-unit">층</span></div>
+    </div>
+    <div class="floor-stat">
+      <div class="stat-label">용도</div>
+      <div class="stat-value" style="font-size:14px;padding-top:4px">업무·학원<br>상업시설</div>
+    </div>
+  </div>
+
+  <div class="qr-section">
+    <div class="qr-block">
+      <div class="qr-wrap" id="qr-kakao"></div>
+      <div class="qr-label">
+        <div class="qr-icon">💬</div>
+        <div class="qr-channel">카카오톡 오픈채팅</div>
+        <div class="qr-desc">QR 스캔 후 바로 채팅</div>
+      </div>
+    </div>
+
+    <div class="qr-divider"></div>
+
+    <div class="qr-block">
+      <div class="qr-wrap" id="qr-phone"></div>
+      <div class="qr-label">
+        <div class="qr-icon">📞</div>
+        <div class="qr-channel">전화 바로 연결</div>
+        <div class="qr-desc">QR 스캔 후 바로 전화</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="contact-row">
+    <div>
+      <div class="contact-label">전화 문의</div>
+      <div class="contact-hint">평일 · 주말 언제든지</div>
+    </div>
+    <div class="contact-number">010-7208-9537</div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-addr">서울 중랑구 신내동 449-5 월출빌딩</div>
+    <div class="footer-hours">경춘선 신내역 인근</div>
+  </div>
+
+  <div class="print-btn">
+    <button onclick="window.print()">🖨 인쇄 / PDF 저장</button>
+  </div>
+</div>
+
+<script>
+new QRCode(document.getElementById('qr-kakao'), {
+  text: 'https://open.kakao.com/o/sWZj6Fzi',
+  width: 132,
+  height: 132,
+  colorDark: '#1a1a1a',
+  colorLight: '#ffffff',
+  correctLevel: QRCode.CorrectLevel.M
+});
+
+new QRCode(document.getElementById('qr-phone'), {
+  text: 'tel:01072089537',
+  width: 132,
+  height: 132,
+  colorDark: '#1a1a1a',
+  colorLight: '#ffffff',
+  correctLevel: QRCode.CorrectLevel.M
+});
+</script>
+</body>
+</html>
