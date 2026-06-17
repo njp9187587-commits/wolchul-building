@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>월출빌딩 4층 임대 문의</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+
+  :root {
+    --bg: #0f0f0f;
+    --bg2: #181818;
+    --bg3: #222222;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #f0ede6;
+    --text2: #9e9b94;
+    --text3: #5c5a55;
+    --accent: #c8a96e;
+    --accent2: #a8863e;
+    --user-bubble: #2a2218;
+    --bot-bubble: #1e1e1e;
+    --radius: 14px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Header */
+  header {
+    padding: 28px 24px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .header-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .logo-area {}
+  .eyebrow {
+    font-size: 10px;
+    letter-spacing: .18em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .building-name {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -.02em;
+    color: var(--text);
+  }
+  .floor-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 6px;
+    background: rgba(200,169,110,0.12);
+    border: 1px solid rgba(200,169,110,0.25);
+    border-radius: 999px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--accent);
+  }
+  .dot-green {
+    width: 6px; height: 6px;
+    background: #4caf74;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .contact-badge {
+    text-align: right;
+    font-size: 11px;
+    color: var(--text3);
+    line-height: 1.6;
+  }
+  .contact-badge a {
+    color: var(--text2);
+    text-decoration: none;
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .contact-badge a:hover { color: var(--accent); }
+
+  /* Info strip */
+  .info-strip {
+    border-bottom: 1px solid var(--border);
+    background: var(--bg2);
+  }
+  .info-strip-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 14px 24px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .info-item {
+    flex: 1;
+    min-width: 80px;
+    padding: 0 14px;
+    border-right: 1px solid var(--border);
+  }
+  .info-item:first-child { padding-left: 0; }
+  .info-item:last-child { border-right: none; }
+  .info-label { font-size: 10px; color: var(--text3); letter-spacing: .05em; margin-bottom: 4px; }
+  .info-value { font-size: 15px; font-weight: 500; color: var(--text); }
+  .info-unit { font-size: 11px; color: var(--text2); margin-left: 1px; }
+
+  /* Chat area */
+  .chat-wrap {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 24px 0;
+  }
+  .chat-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 24px;
+  }
+
+  /* Messages */
+  .msg-row { display: flex; gap: 10px; }
+  .msg-row.user { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .avatar-bot {
+    background: rgba(200,169,110,0.15);
+    border: 1px solid rgba(200,169,110,0.2);
+    color: var(--accent);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: .02em;
+  }
+  .avatar-user {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    font-size: 16px;
+  }
+
+  .bubble {
+    max-width: 76%;
+    padding: 12px 16px;
+    border-radius: var(--radius);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .bubble-bot {
+    background: var(--bot-bubble);
+    border: 1px solid var(--border);
+    border-top-left-radius: 4px;
+    color: var(--text);
+  }
+  .bubble-user {
+    background: var(--user-bubble);
+    border: 1px solid rgba(200,169,110,0.2);
+    border-top-right-radius: 4px;
+    color: var(--text);
+  }
+  .bubble b { color: var(--accent); font-weight: 500; }
+
+  /* Typing indicator */
+  .typing { display: flex; align-items: center; gap: 4px; padding: 14px 16px; }
+  .typing span {
+    width: 6px; height: 6px;
+    background: var(--text3);
+    border-radius: 50%;
+    animation: bounce 1.2s infinite;
+  }
+  .typing span:nth-child(2) { animation-delay: .2s; }
+  .typing span:nth-child(3) { animation-delay: .4s; }
+  @keyframes bounce {
+    0%,80%,100% { transform: translateY(0); opacity: .4; }
+    40% { transform: translateY(-5px); opacity: 1; }
+  }
+
+  /* Quick questions */
+  .quick-area {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 24px 12px;
+  }
+  .quick-label { font-size: 11px; color: var(--text3); margin-bottom: 8px; letter-spacing: .04em; }
+  .quick-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .pill {
+    padding: 6px 13px;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--text2);
+    cursor: pointer;
+    font-family: 'Noto Sans KR', sans-serif;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .pill:hover { background: var(--bg3); border-color: var(--accent); color: var(--accent); }
+
+  /* Input bar */
+  .input-bar {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 14px 24px 20px;
+    position: sticky;
+    bottom: 0;
+  }
+  .input-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .input-field {
+    flex: 1;
+    background: var(--bg2);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    outline: none;
+    transition: border-color .15s;
+  }
+  .input-field::placeholder { color: var(--text3); }
+  .input-field:focus { border-color: var(--accent2); }
+
+  .send-btn {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    background: var(--accent);
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: background .15s;
+    flex-shrink: 0;
+  }
+  .send-btn:hover { background: var(--accent2); }
+  .send-btn svg { width: 18px; height: 18px; }
+
+  /* Footer note */
+  .footer-note {
+    text-align: center;
+    font-size: 10px;
+    color: var(--text3);
+    padding: 8px 0 0;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 480px) {
+    .building-name { font-size: 18px; }
+    .bubble { max-width: 88%; font-size: 13px; }
+    .header-inner { flex-direction: column; align-items: flex-start; }
+    .contact-badge { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo-area">
+      <div class="eyebrow">임대 문의</div>
+      <div class="building-name">월출빌딩 4층</div>
+      <div class="floor-tag"><span class="dot-green"></span> 즉시 입주 가능</div>
+    </div>
+    <div class="contact-badge">
+      전화 문의<br>
+      <a href="tel:01072089537">010-7208-9537</a>
+      <a href="https://open.kakao.com/o/sWZj6Fzi" target="_blank" style="color:#f0c040;margin-top:2px">카카오톡 오픈채팅 ↗</a>
+    </div>
+  </div>
+</header>
+
+<div class="info-strip">
+  <div class="info-strip-inner">
+    <div class="info-item">
+      <div class="info-label">위치</div>
+      <div class="info-value">4<span class="info-unit">층</span></div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">전용면적</div>
+      <div class="info-value">132<span class="info-unit">m²</span></div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">보증금</div>
+      <div class="info-value">1,000<span class="info-unit">만원~</span></div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">월 임대료</div>
+      <div class="info-value">협의<span class="info-unit"></span></div>
+    </div>
+    <div class="info-item">
+      <div class="info-label">주소</div>
+      <div class="info-value" style="font-size:12px">신내동 449-5</div>
+    </div>
+  </div>
+</div>
+
+<div class="chat-wrap" id="chatWrap">
+  <div class="chat-inner" id="chatInner">
+    <div class="msg-row">
+      <div class="avatar avatar-bot">빌딩</div>
+      <div class="bubble bubble-bot">
+        안녕하세요! 👋<br>
+        <b>월출빌딩 4층</b> 임대 문의 자동응답 비서입니다.<br><br>
+        보증금·월세, 면적·구조, 계약 절차 등 궁금하신 점을 무엇이든 물어봐 주세요.
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="quick-area" id="quickArea">
+  <div class="quick-label">자주 묻는 질문</div>
+  <div class="quick-pills">
+    <button class="pill" onclick="quickAsk('4층 임대 조건이 어떻게 되나요?')">임대 조건</button>
+    <button class="pill" onclick="quickAsk('보증금과 월세가 얼마인가요?')">보증금·월세</button>
+    <button class="pill" onclick="quickAsk('면적과 구조가 어떻게 되나요?')">면적·구조</button>
+    <button class="pill" onclick="quickAsk('어떤 업종이 입주 가능한가요?')">입주 가능 업종</button>
+    <button class="pill" onclick="quickAsk('계약 절차가 어떻게 되나요?')">계약 절차</button>
+    <button class="pill" onclick="quickAsk('주변 교통과 입지가 어떻게 되나요?')">교통·입지</button>
+    <button class="pill" onclick="quickAsk('관리비는 어떻게 부과되나요?')">관리비</button>
+    <button class="pill" onclick="quickAsk('인테리어 공사가 가능한가요?')">인테리어</button>
+    <button class="pill" onclick="quickAsk('주차가 가능한가요?')">주차</button>
+  </div>
+</div>
+
+<div class="input-bar">
+  <div class="input-inner">
+    <input class="input-field" id="chatInput" type="text" placeholder="궁금하신 점을 입력하세요..."
+      onkeydown="if(event.key==='Enter')sendChat()">
+    <button class="send-btn" onclick="sendChat()" aria-label="전송">
+      <svg viewBox="0 0 24 24" fill="none" stroke="#0f0f0f" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/>
+      </svg>
+    </button>
+  </div>
+  <div class="footer-note">AI 비서 답변 · 최종 계약 조건은 건물주와 직접 확인 바랍니다</div>
+</div>
+
+<script>
+const SYSTEM_PROMPT = `당신은 서울 중랑구 신내동 449-5 월출빌딩의 4층 임대 문의 자동응답 비서입니다.
+건물 정보는 다음과 같습니다:
+
+건물명: 월출빌딩
+주소: 서울 중랑구 신내동 449-5
+4층 현황: 공실 (기존 스터디카페 퇴거, 즉시 입주 가능)
+전용면적: 132.46m² (약 40평)
+보증금: 1,000만원 (협의 가능)
+월 임대료: 기존 102만원(부가세 포함), 신규 조건은 협의
+입주 가능 업종: 사무실, 학원, 스터디카페, 헬스장, 상업시설 등
+계약 절차: 방문상담 → 조건협의 → 표준임대차계약서 작성 → 보증금 입금 → 입주
+관리비: 공용 수도세 격월 분담, 청소비 건물주 부담
+인테리어: 원상복구 조건으로 임차인 자체 시공 가능, 구조 변경은 건물주 사전 동의 필요
+주차: 건물 내 일부 주차 가능 (방문 시 확인)
+교통: 경춘선 신내역 인근, 버스 노선 다수, 주변 아파트 단지 밀집
+문의 전화: 010-7208-9537
+카카오톡: https://open.kakao.com/o/sWZj6Fzi
+
+항상 한국어로, 친절하고 간결하게 답변하세요.
+계약 확정 전 최종 조건은 건물주와 직접 확인을 안내하세요.
+모르는 정보는 "010-7208-9537로 문의해 주세요"라고 안내하세요.
+답변은 3~5문장 이내로 간결하게 작성하세요.`;
+
+const history = [];
+
+function addMsg(text, isUser) {
+  const inner = document.getElementById('chatInner');
+  const row = document.createElement('div');
+  row.className = 'msg-row' + (isUser ? ' user' : '');
+
+  const avatar = document.createElement('div');
+  avatar.className = isUser ? 'avatar avatar-user' : 'avatar avatar-bot';
+  avatar.textContent = isUser ? '나' : '빌딩';
+
+  const bubble = document.createElement('div');
+  bubble.className = isUser ? 'bubble bubble-user' : 'bubble bubble-bot';
+  bubble.innerHTML = text.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+
+  row.appendChild(avatar);
+  row.appendChild(bubble);
+  inner.appendChild(row);
+  scrollToBottom();
+  return bubble;
+}
+
+function addTyping() {
+  const inner = document.getElementById('chatInner');
+  const row = document.createElement('div');
+  row.className = 'msg-row';
+  row.id = 'typingRow';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'avatar avatar-bot';
+  avatar.textContent = '빌딩';
+
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble bubble-bot typing';
+  bubble.innerHTML = '<span></span><span></span><span></span>';
+
+  row.appendChild(avatar);
+  row.appendChild(bubble);
+  inner.appendChild(row);
+  scrollToBottom();
+}
+
+function removeTyping() {
+  const t = document.getElementById('typingRow');
+  if (t) t.remove();
+}
+
+function scrollToBottom() {
+  const wrap = document.getElementById('chatWrap');
+  setTimeout(() => { wrap.scrollTop = wrap.scrollHeight; }, 50);
+}
+
+async function sendChat() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  // Hide quick pills after first message
+  const qa = document.getElementById('quickArea');
+  if (qa) qa.style.display = 'none';
+
+  addMsg(text, true);
+  history.push({ role: 'user', content: text });
+  addTyping();
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1000,
+        system: SYSTEM_PROMPT,
+        messages: history
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || '죄송합니다, 잠시 후 다시 시도해 주세요.';
+    removeTyping();
+    addMsg(reply, false);
+    history.push({ role: 'assistant', content: reply });
+  } catch (e) {
+    removeTyping();
+    addMsg('연결에 문제가 생겼어요. 직접 전화 문의 부탁드립니다.\n📞 010-7208-9537', false);
+  }
+}
+
+function quickAsk(q) {
+  document.getElementById('chatInput').value = q;
+  sendChat();
+}
+</script>
+</body>
+</html>
